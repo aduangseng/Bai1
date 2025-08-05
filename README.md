@@ -20,11 +20,9 @@ Không sử dụng thuật toán phức tạp, vì hệ thống chủ yếu thao
 3. Một số giao diện cơ bản
 Dưới đây là mô tả một số giao diện người dùng đã xây dựng:
   + Giao diện danh sách sinh viên:
-  Bảng hiển thị các thông tin: Mã SV, Tên SV, Lớp, Quê quán, kèm các nút Sửa / Xóa
-<img width="673" height="172" alt="image" src="https://github.com/user-attachments/assets/f673ce34-17de-4270-a9b9-4ded99a2c7df" />
+  Bảng hiển thị các thông tin: Mã SV, Tên SV, Lớp, Quê quán, kèm các nút Sửa / Xóa<img width="673" height="172" alt="image" src="https://github.com/user-attachments/assets/f673ce34-17de-4270-a9b9-4ded99a2c7df" />
   + Giao diện tìm kiếm sinh viên theo mã:
-  Người dùng nhập mã sinh viên → nhấn "Tìm kiếm" → thông tin sinh viên hiện ra bên dưới.
-<img width="393" height="248" alt="image" src="https://github.com/user-attachments/assets/8b44c48c-135b-425c-bd33-808c48b85eca" />
+  Người dùng nhập mã sinh viên → nhấn "Tìm kiếm" → thông tin sinh viên hiện ra bên dưới.<img width="393" height="248" alt="image" src="https://github.com/user-attachments/assets/8b44c48c-135b-425c-bd33-808c48b85eca" />
   + Giao diện thêm và cập nhật sinh viên:
   Form gồm các trường: Mã SV, Tên SV, Tên lớp, Quê quán → nút "Thêm mới"
   Khi nhấn "Sửa", thông tin hiện ra để chỉnh sửa → nhấn "Lưu"
