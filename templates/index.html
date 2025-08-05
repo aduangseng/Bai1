@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tìm kiếm Sinh Viên</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tìm kiếm Sinh viên</h1>
+    <input type="text" id="search-MaSV" placeholder="Nhập mã SV">
+    <button onclick="searchStudent()">Tìm kiếm</button>
+
+    <h3>Danh sách Sinh Viên đã tìm kiếm</h3>
+    <table id="table-sinhvien">
+        <thead>
+            <tr>
+                <th>Mã SV</th>
+                <th>Tên SV</th>
+                <th>Lớp</th>
+                <th>Quê Quán</th>
+            </tr>
+        </thead>
+        <tbody id="student-list"></tbody>
+    </table>
+
+    <script>
+       
+            async function searchStudent() {
+                const maSV = document.getElementById('search-MaSV').value;
+                const response = await fetch(`http://127.0.0.1:5000/api/sinhvien/${maSV}`);  // ← sửa URL tại đây
+                const tbody = document.getElementById('student-list');
+                tbody.innerHTML = '';
+
+                if (response.ok) {
+                    const sv = await response.json();
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${sv.MaSV}</td>
+                        <td>${sv.TenSV}</td>
+                        <td>${sv.TenLop || ''}</td>
+                        <td>${sv.QueQuan || ''}</td>
+                    `;
+                    tbody.appendChild(row);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Lỗi không xác định');
+                }
+            }
+
+        
+
+
+    </script>
+</body>
+</html>

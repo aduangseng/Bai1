@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Sinh Viên</title>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Thêm / Cập nhật Sinh Viên</h2>
+    <form id="form-sv">
+        <label>Mã SV:</label><br>
+        <input type="text" id="maSV"><br><br>
+        
+        <label>Tên SV:</label><br>
+        <input type="text" id="tenSV"><br><br>
+        
+        <label>Lớp:</label><br>
+        <input type="text" id="tenLop"><br><br>
+        
+        <label>Quê Quán:</label><br>
+        <input type="text" id="queQuan"><br><br>
+
+        <button type="submit">Lưu</button>
+        <button type="button" onclick="resetForm()">Làm mới</button>
+    </form>
+
+    <h3>Danh sách Sinh Viên</h3>
+    <table id="table-sinhvien">
+        <thead>
+            <tr>
+                <th>Mã SV</th>
+                <th>Tên SV</th>
+                <th>Lớp</th>
+                <th>Quê Quán</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+
+    <script>
+        const API_BASE = 'http://127.0.0.1:5000/api/sinhvien';
+
+        async function fetchSinhVien() {
+            const res = await fetch(API_BASE);
+            const data = await res.json();
+            const tbody = document.querySelector('#table-sinhvien tbody');
+            tbody.innerHTML = '';
+            data.forEach(sv => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${sv.MaSV}</td>
+                    <td>${sv.TenSV}</td>
+                    <td>${sv.TenLop}</td>
+                    <td>${sv.QueQuan}</td>
+                    <td>
+                        <button onclick="editSinhVien('${sv.MaSV}', '${sv.TenSV}', '${sv.TenLop}', '${sv.QueQuan}')">Sửa</button>
+                        <button onclick="deleteSinhVien('${sv.MaSV}')">Xoá</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        async function deleteSinhVien(maSV) {
+            if (!confirm(`Bạn có chắc muốn xoá sinh viên ${maSV}?`)) return;
+            const res = await fetch(`${API_BASE}/${maSV}`, { method: 'DELETE' });
+            await res.json();
+            fetchSinhVien();
+        }
+
+        function editSinhVien(maSV, tenSV, tenLop, queQuan) {
+            document.getElementById('maSV').value = maSV;
+            document.getElementById('tenSV').value = tenSV;
+            document.getElementById('tenLop').value = tenLop;
+            document.getElementById('queQuan').value = queQuan;
+        }
+
+        function resetForm() {
+            document.getElementById('form-sv').reset();
+        }
+
+        document.getElementById('form-sv').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const data = {
+                MaSV: document.getElementById('maSV').value.trim(),
+                TenSV: document.getElementById('tenSV').value.trim(),
+                TenLop: document.getElementById('tenLop').value.trim(),
+                QueQuan: document.getElementById('queQuan').value.trim()
+            };
+
+            let method = 'POST';
+            let url = API_BASE;
+
+            // Nếu mã sinh viên đã tồn tại trong bảng => cập nhật
+            const existingRow = Array.from(document.querySelectorAll('#table-sinhvien tbody tr'))
+                .find(row => row.children[0].textContent === data.MaSV);
+            if (existingRow) {
+                method = 'PUT';
+                url = `${API_BASE}/${data.MaSV}`;
+            }
+
+            const res = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            await res.json();
+            fetchSinhVien();
+            resetForm();
+        });
+
+        // Tải dữ liệu khi mở trang
+        fetchSinhVien();
+    </script>
+</body>
+</html>
